@@ -1,6 +1,10 @@
 module "hush_security" {
-  source  = "hushsecurity/onboard/aws"
-  version = "~> 1.0" # Find the laest version at https://registry.terraform.io/modules/hushsecurity/onboard/aws/latest
+  source = "../../"
 
-  hush_org_id = var.hush_org_id
+  hush_org_id              = var.hush_org_id
+  hush_account_id          = "116981795030"
+  secrets_manager_readonly = false
+  s3_tf_state_bucket_arns  = ["arn:aws:s3:::hushsecurity-dev-tf-state"]
+
+  allowed_regions = ["eu-central-1"]
 }
