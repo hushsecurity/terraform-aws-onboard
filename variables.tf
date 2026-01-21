@@ -1,3 +1,14 @@
+variable "type" {
+  description = "Deployment type: 'single' for one account, 'stackset' for multi-account via CloudFormation StackSet."
+  type        = string
+  default     = "single"
+
+  validation {
+    condition     = contains(["single", "stackset"], var.type)
+    error_message = "type must be 'single' or 'stackset'."
+  }
+}
+
 variable "hush_org_id" {
   description = "Your Hush Security organization ID, used as the external ID for cross-account role assumption."
   type        = string
