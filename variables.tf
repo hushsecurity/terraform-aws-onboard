@@ -101,3 +101,35 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+# StackSet mode variables
+
+variable "stackset_template_url" {
+  description = "S3 URL of the CloudFormation template for StackSet deployment."
+  type        = string
+  default     = "https://hush-security-public.s3.eu-west-1.amazonaws.com/cf_templates/aws_onboarding.yaml"
+}
+
+variable "organizational_unit_ids" {
+  description = "List of AWS Organizations OU IDs to deploy the StackSet to."
+  type        = list(string)
+  default     = []
+}
+
+variable "account_ids" {
+  description = "List of AWS account IDs to deploy the StackSet to."
+  type        = list(string)
+  default     = []
+}
+
+variable "auto_deployment" {
+  description = "Automatically deploy to new accounts added to the target OUs."
+  type        = bool
+  default     = true
+}
+
+variable "call_as" {
+  description = "Whether to run as the management account (SELF) or delegated administrator (DELEGATED_ADMIN)."
+  type        = string
+  default     = "DELEGATED_ADMIN"
+}
