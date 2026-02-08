@@ -67,9 +67,15 @@ variable "s3_tf_state_readonly" {
 }
 
 variable "s3_tf_state_bucket_arns" {
-  description = "List of S3 bucket ARNs containing Terraform state files. Null allows all buckets."
+  description = "List of S3 bucket ARNs containing Terraform state files. Leave empty for auto discovery."
   type        = list(string)
   default     = null
+}
+
+variable "s3_tf_state_bucket_tags" {
+  description = "Map of S3 bucket tags containing Terraform state files. Leave empty for auto discovery."
+  type        = map(string)
+  default     = {}
 }
 
 variable "s3_tf_state_object_arns" {

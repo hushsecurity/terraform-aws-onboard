@@ -47,6 +47,11 @@ module "hush_security" {
     "arn:aws:s3:::mycompany-terraform-state"
   ]
 
+  # Restrict S3 TF state access to buckets by tags (requires ABAC enabled on the buckets)
+  s3_tf_state_bucket_tags = {
+    "hush" = "true"
+  }
+
   tags = {
     Environment = "production"
   }
@@ -97,7 +102,8 @@ module "hush_security" {
 | ssm_parameter_store_readonly | Enable SSM Parameter Store read-only access. | `bool` | `true` | no |
 | kms_readonly | Enable KMS read-only access. | `bool` | `true` | no |
 | s3_tf_state_readonly | Enable S3 read-only access for Terraform state files. | `bool` | `true` | no |
-| s3_tf_state_bucket_arns | S3 bucket ARNs for Terraform state. Null allows all. | `list(string)` | `null` | no |
+| s3_tf_state_bucket_arns | S3 bucket ARNs for Terraform state. | `list(string)` | `null` | no |
+| s3_tf_state_bucket_tags | S3 bucket tags for Terraform state. <br>Requires [Bucket ABAC](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security_iam_service-with-iam.html#security_iam_service-with-iam-tags) to be enabled. | `map(string)` | `{}` | no |
 | s3_tf_state_object_arns | Specific S3 object ARNs for Terraform state files. | `list(string)` | `null` | no |
 | security_audit | Attach AWS SecurityAudit managed policy. | `bool` | `true` | no |
 | send_events | Whether to send AWS resource change events via EventBridge. | `bool` | `true` | no |

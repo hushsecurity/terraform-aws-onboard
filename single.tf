@@ -233,26 +233,43 @@ data "aws_iam_policy_document" "this" {
   }
 
   dynamic "statement" {
-    for_each = var.s3_tf_state_readonly ? [1] : []
+    for_each = var.s3_tf_state_readonly && var.s3_tf_state_bucket_arns != null ? [1] : []
     content {
       sid    = "S3TFStateListObjects"
       effect = "Allow"
       actions = [
         "s3:ListBucket"
       ]
-      resources = coalesce(var.s3_tf_state_bucket_arns, ["*"])
+      resources = var.s3_tf_state_bucket_arns
     }
   }
 
   dynamic "statement" {
-    for_each = var.s3_tf_state_readonly && var.s3_tf_state_bucket_arns == null ? [1] : []
+    for_each = var.s3_tf_state_readonly ? var.s3_tf_state_bucket_tags : {}
     content {
-      sid    = "S3TFStateListBuckets"
       effect = "Allow"
       actions = [
-        "s3:ListAllMyBuckets"
+        "s3:ListBucket"
       ]
-      resources = ["arn:aws:s3:::*"]
+      resources = ["*"]
+      condition {
+        test     = "StringEquals"
+        variable = "aws:ResourceTag/${statement.key}"
+        values   = [statement.value]
+      }
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.s3_tf_state_readonly && var.s3_tf_state_bucket_arns == null && length(var.s3_tf_state_bucket_tags) == 0 ? [1] : []
+    content {
+      sid    = "S3TFStateBucketsAutoDiscovery"
+      effect = "Allow"
+      actions = [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket"
+      ]
+      resources = ["*"]
     }
   }
 
@@ -265,6 +282,18 @@ data "aws_iam_policy_document" "this" {
         "s3:GetObject"
       ]
       resources = concat(["arn:aws:s3:::*/*tfstate"], coalesce(var.s3_tf_state_object_arns, []))
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.s3_tf_state_readonly && length(var.s3_tf_state_bucket_tags) > 0 ? [1] : []
+    content {
+      sid    = "Tags"
+      effect = "Allow"
+      actions = [
+        "tag:GetResources"
+      ]
+      resources = ["*"]
     }
   }
 }

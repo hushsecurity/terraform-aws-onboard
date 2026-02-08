@@ -6,9 +6,10 @@ locals {
 
   common_tags = merge(
     {
-      Name      = local.role_name
-      Version   = local.version
-      CreatedBy = "Terraform"
+      Name                = local.role_name
+      Version             = local.version
+      CreatedBy           = "Terraform"
+      S3TFStateBucketTags = length(var.s3_tf_state_bucket_tags) > 0 ? base64encode(jsonencode(var.s3_tf_state_bucket_tags)) : ""
     },
     var.tags
   )
