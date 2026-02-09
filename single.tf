@@ -45,6 +45,8 @@ data "aws_iam_policy_document" "this" {
     effect = "Allow"
     actions = [
       "iam:GetRole",
+      "iam:GetRolePolicy",
+      "iam:ListAttachedRolePolicies",
       "iam:PassRole"
     ]
     resources = [aws_iam_role.this.arn]
