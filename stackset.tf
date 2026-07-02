@@ -29,6 +29,7 @@ resource "aws_cloudformation_stack_set" "this" {
     SecurityAudit             = var.security_audit ? "true" : "false"
     SendEvents                = var.send_events ? "true" : "false"
     BedrockAgentsReadonly     = var.bedrock_agents_readonly ? "true" : "false"
+    BedrockAgentCoreReadonly  = var.bedrock_agentcore_readonly ? "true" : "false"
     AllowedRegions            = join(",", coalesce(var.allowed_regions, []))
   }
 

@@ -1,5 +1,5 @@
 locals {
-  version = "1.4"
+  version = "1.5"
 
   hush_account_arn = "arn:aws:iam::${var.hush_account_id}:root"
   role_name        = "hush-security-${random_id.suffix.hex}"
