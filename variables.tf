@@ -96,6 +96,12 @@ variable "send_events" {
   default     = true
 }
 
+variable "bedrock_agents_readonly" {
+  description = "Enable Bedrock Agents read-only access for agent discovery. Full agent metadata (created_by, runtime identity, attached policies) also relies on the SecurityAudit policy for CloudTrail and IAM reads; keep security_audit enabled."
+  type        = bool
+  default     = false
+}
+
 variable "allowed_regions" {
   description = "List of AWS regions to restrict access to. Null allows all regions."
   type        = list(string)

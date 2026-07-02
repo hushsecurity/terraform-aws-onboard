@@ -28,6 +28,7 @@ resource "aws_cloudformation_stack_set" "this" {
     S3TFStateObjectARNs       = join(",", coalesce(var.s3_tf_state_object_arns, []))
     SecurityAudit             = var.security_audit ? "true" : "false"
     SendEvents                = var.send_events ? "true" : "false"
+    BedrockAgentsReadonly     = var.bedrock_agents_readonly ? "true" : "false"
     AllowedRegions            = join(",", coalesce(var.allowed_regions, []))
   }
 
