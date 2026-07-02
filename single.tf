@@ -233,6 +233,29 @@ data "aws_iam_policy_document" "this" {
   }
 
   dynamic "statement" {
+    for_each = var.bedrock_agents_readonly ? [1] : []
+    content {
+      sid    = "BedrockAgents"
+      effect = "Allow"
+      actions = [
+        "bedrock:ListAgents",
+        "bedrock:GetAgent",
+        "bedrock:ListAgentActionGroups",
+        "bedrock:GetAgentActionGroup"
+      ]
+      resources = ["*"]
+      dynamic "condition" {
+        for_each = var.allowed_regions != null ? [1] : []
+        content {
+          test     = "StringEquals"
+          variable = "aws:RequestedRegion"
+          values   = var.allowed_regions
+        }
+      }
+    }
+  }
+
+  dynamic "statement" {
     for_each = var.s3_tf_state_readonly && var.s3_tf_state_bucket_arns != null ? [1] : []
     content {
       sid    = "S3TFStateListObjects"
