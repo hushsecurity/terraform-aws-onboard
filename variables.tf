@@ -102,6 +102,12 @@ variable "bedrock_agents_readonly" {
   default     = false
 }
 
+variable "bedrock_agentcore_readonly" {
+  description = "Enable Bedrock AgentCore (MCP gateway) read-only access."
+  type        = bool
+  default     = false
+}
+
 variable "allowed_regions" {
   description = "List of AWS regions to restrict access to. Null allows all regions."
   type        = list(string)
