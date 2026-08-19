@@ -108,6 +108,12 @@ variable "bedrock_agentcore_readonly" {
   default     = false
 }
 
+variable "bedrock_agentcore_agents_readonly" {
+  description = "Enable Bedrock AgentCore agents read-only access for AgentCore agent (harness + runtime) discovery. Full agent metadata (created_by, runtime identity, attached policies) also relies on the SecurityAudit policy for CloudTrail and IAM reads; keep security_audit enabled."
+  type        = bool
+  default     = false
+}
+
 variable "allowed_regions" {
   description = "List of AWS regions to restrict access to. Null allows all regions."
   type        = list(string)
