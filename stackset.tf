@@ -15,22 +15,23 @@ resource "aws_cloudformation_stack_set" "this" {
   }
 
   parameters = {
-    UniqueSuffix              = random_id.suffix.hex
-    ExternalId                = var.hush_org_id
-    CodeArtifactReadonly      = var.codeartifact_readonly ? "true" : "false"
-    ECRReadonly               = var.ecr_readonly ? "true" : "false"
-    SecretsManagerReadonly    = var.secrets_manager_readonly ? "true" : "false"
-    SSMParameterStoreReadonly = var.ssm_parameter_store_readonly ? "true" : "false"
-    KMSReadonly               = var.kms_readonly ? "true" : "false"
-    S3TFStateReadOnly         = var.s3_tf_state_readonly ? "true" : "false"
-    S3TFStateBucketARNs       = join(",", coalesce(var.s3_tf_state_bucket_arns, ["*"]))
-    S3TFStateBucketTags       = length(var.s3_tf_state_bucket_tags) > 0 ? jsonencode(var.s3_tf_state_bucket_tags) : ""
-    S3TFStateObjectARNs       = join(",", coalesce(var.s3_tf_state_object_arns, []))
-    SecurityAudit             = var.security_audit ? "true" : "false"
-    SendEvents                = var.send_events ? "true" : "false"
-    BedrockAgentsReadonly     = var.bedrock_agents_readonly ? "true" : "false"
-    BedrockAgentCoreReadonly  = var.bedrock_agentcore_readonly ? "true" : "false"
-    AllowedRegions            = join(",", coalesce(var.allowed_regions, []))
+    UniqueSuffix                   = random_id.suffix.hex
+    ExternalId                     = var.hush_org_id
+    CodeArtifactReadonly           = var.codeartifact_readonly ? "true" : "false"
+    ECRReadonly                    = var.ecr_readonly ? "true" : "false"
+    SecretsManagerReadonly         = var.secrets_manager_readonly ? "true" : "false"
+    SSMParameterStoreReadonly      = var.ssm_parameter_store_readonly ? "true" : "false"
+    KMSReadonly                    = var.kms_readonly ? "true" : "false"
+    S3TFStateReadOnly              = var.s3_tf_state_readonly ? "true" : "false"
+    S3TFStateBucketARNs            = join(",", coalesce(var.s3_tf_state_bucket_arns, ["*"]))
+    S3TFStateBucketTags            = length(var.s3_tf_state_bucket_tags) > 0 ? jsonencode(var.s3_tf_state_bucket_tags) : ""
+    S3TFStateObjectARNs            = join(",", coalesce(var.s3_tf_state_object_arns, []))
+    SecurityAudit                  = var.security_audit ? "true" : "false"
+    SendEvents                     = var.send_events ? "true" : "false"
+    BedrockAgentsReadonly          = var.bedrock_agents_readonly ? "true" : "false"
+    BedrockAgentCoreReadonly       = var.bedrock_agentcore_readonly ? "true" : "false"
+    BedrockAgentCoreAgentsReadonly = var.bedrock_agentcore_agents_readonly ? "true" : "false"
+    AllowedRegions                 = join(",", coalesce(var.allowed_regions, []))
   }
 
   capabilities = ["CAPABILITY_NAMED_IAM"]
