@@ -233,15 +233,20 @@ data "aws_iam_policy_document" "this" {
   }
 
   dynamic "statement" {
-    for_each = var.bedrock_agents_readonly ? [1] : []
+    for_each = local.agent_discovery ? [1] : []
     content {
-      sid    = "BedrockAgents"
+      sid    = "AgentDiscovery"
       effect = "Allow"
       actions = [
         "bedrock:ListAgents",
         "bedrock:GetAgent",
         "bedrock:ListAgentActionGroups",
-        "bedrock:GetAgentActionGroup"
+        "bedrock:GetAgentActionGroup",
+        "bedrock-agentcore:ListAgentRuntimes",
+        "bedrock-agentcore:GetAgentRuntime",
+        "bedrock-agentcore:ListHarnesses",
+        "bedrock-agentcore:GetHarness",
+        "bedrock-agentcore:GetGateway"
       ]
       resources = ["*"]
       dynamic "condition" {
@@ -256,9 +261,9 @@ data "aws_iam_policy_document" "this" {
   }
 
   dynamic "statement" {
-    for_each = var.bedrock_agentcore_readonly ? [1] : []
+    for_each = local.mcp_discovery ? [1] : []
     content {
-      sid    = "BedrockAgentCore"
+      sid    = "McpDiscovery"
       effect = "Allow"
       actions = [
         "bedrock-agentcore:ListGateways",
@@ -278,18 +283,30 @@ data "aws_iam_policy_document" "this" {
   }
 
   dynamic "statement" {
-    for_each = var.bedrock_agentcore_agents_readonly ? [1] : []
+    for_each = var.agent_activity_readonly ? [1] : []
     content {
-      sid    = "BedrockAgentCoreAgents"
+      sid    = "AgentActivity"
       effect = "Allow"
       actions = [
-        "bedrock-agentcore:ListAgentRuntimes",
-        "bedrock-agentcore:GetAgentRuntime",
-        "bedrock-agentcore:ListHarnesses",
-        "bedrock-agentcore:GetHarness",
-        "bedrock-agentcore:GetGateway"
+        # DescribeLogGroups also comes from SecurityAudit, but the two toggles
+        # are independent: without it here, activity with security_audit off
+        # can read groups it cannot find, and the feed is silently empty
+        "logs:DescribeLogGroups",
+        "logs:FilterLogEvents",
+        "logs:GetLogEvents"
       ]
-      resources = ["*"]
+      resources = [
+        # runtimes only: the broader bedrock-agentcore and vendedlogs wildcards
+        # also cover Memory, whose records carry conversation content this
+        # feature does not read and did not ask for
+        "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/aws/bedrock-agentcore/runtimes/*",
+        "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/aws/vendedlogs/bedrock-agentcore/gateways/*",
+        # both ARN forms: CloudWatch Logs presents a group with and without the
+        # trailing :* depending on the call, and the suffixed form alone denies
+        # every read of the shared span group while looking correctly set up
+        "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:aws/spans",
+        "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:aws/spans:*"
+      ]
       dynamic "condition" {
         for_each = var.allowed_regions != null ? [1] : []
         content {
