@@ -96,20 +96,42 @@ variable "send_events" {
   default     = true
 }
 
+# Superseded by the three toggles below. Terraform has no `moved` equivalent
+# for input variables, so removing them outright fails a consumer's next plan
+# with "An argument named ... is not expected here". Default null means "not
+# supplied"; an explicit value still wins, so an existing opt-out is kept.
 variable "bedrock_agents_readonly" {
-  description = "Enable Bedrock Agents read-only access for agent discovery. Full agent metadata (created_by, runtime identity, attached policies) also relies on the SecurityAudit policy for CloudTrail and IAM reads; keep security_audit enabled."
+  description = "Deprecated, use agent_discovery_readonly."
   type        = bool
-  default     = false
-}
-
-variable "bedrock_agentcore_readonly" {
-  description = "Enable Bedrock AgentCore (MCP gateway) read-only access."
-  type        = bool
-  default     = false
+  default     = null
 }
 
 variable "bedrock_agentcore_agents_readonly" {
-  description = "Enable Bedrock AgentCore agents read-only access for AgentCore agent (harness + runtime) discovery. Full agent metadata (created_by, runtime identity, attached policies) also relies on the SecurityAudit policy for CloudTrail and IAM reads; keep security_audit enabled."
+  description = "Deprecated, use agent_discovery_readonly."
+  type        = bool
+  default     = null
+}
+
+variable "bedrock_agentcore_readonly" {
+  description = "Deprecated, use mcp_discovery_readonly."
+  type        = bool
+  default     = null
+}
+
+variable "agent_discovery_readonly" {
+  description = "Enable agent discovery read-only access. Covers both AWS agent platforms - classic Bedrock Agents and Bedrock AgentCore harnesses and runtimes - since which platform an agent runs on is not a separate decision. Full agent metadata (created_by, runtime identity, attached policies) also relies on the SecurityAudit policy for CloudTrail and IAM reads; keep security_audit enabled."
+  type        = bool
+  default     = null
+}
+
+variable "mcp_discovery_readonly" {
+  description = "Enable MCP server discovery read-only access. Covers the AgentCore gateways an account exposes as MCP servers, which is the MCP server inventory rather than the agent inventory."
+  type        = bool
+  default     = null
+}
+
+variable "agent_activity_readonly" {
+  description = "Enable agent-activity read-only access for the activity feed. Grants scoped CloudWatch Logs reads on the AgentCore span and gateway log groups, which carry agent prompts, tool arguments and tool results. Agent invocations themselves are read from CloudTrail through the SecurityAudit policy, so keep security_audit enabled."
   type        = bool
   default     = false
 }
