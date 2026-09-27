@@ -1,5 +1,5 @@
 variable "hush_org_id" {
-  description = "Hush Security organization ID."
+  description = "Unique identifier for your organization, shown as the External ID in the Hush Security onboarding flow."
   type        = string
 }
 

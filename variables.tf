@@ -10,7 +10,7 @@ variable "type" {
 }
 
 variable "hush_org_id" {
-  description = "Your Hush Security organization ID, used as the external ID for cross-account role assumption."
+  description = "Unique identifier for your organization, shown as the External ID in the Hush Security onboarding flow and used as the external ID for cross-account role assumption."
   type        = string
 
   validation {
