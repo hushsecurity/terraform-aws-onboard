@@ -24,7 +24,7 @@ This module supports two deployment modes:
 module "hush_security" {
   source = "hushsecurity/onboard/aws"
 
-  hush_org_id = "org-us1234567890abc"  # From Hush Security dashboard
+  hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
 }
 ```
 
@@ -34,7 +34,7 @@ module "hush_security" {
 module "hush_security" {
   source = "hushsecurity/onboard/aws"
 
-  hush_org_id = "org-us1234567890abc"
+  hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
 
   # Disable features you don't need
   codeartifact_readonly = false
@@ -68,7 +68,7 @@ module "hush_security" {
   source = "hushsecurity/onboard/aws"
 
   type        = "stackset"
-  hush_org_id = "org-us1234567890abc"
+  hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
 
   organizational_unit_ids = ["ou-xxxx-xxxxxxxx"]
 }
@@ -80,7 +80,7 @@ module "hush_security" {
   source = "hushsecurity/onboard/aws"
 
   type        = "stackset"
-  hush_org_id = "org-us1234567890abc"
+  hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
 
   account_ids = ["111111111111", "222222222222"]
 }
@@ -95,7 +95,7 @@ module "hush_security" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | type | Deployment type: `single` or `stackset`. | `string` | `"single"` | no |
-| hush_org_id | Your Hush Security organization ID. | `string` | n/a | yes |
+| hush_org_id | Unique identifier for your organization, shown as the External ID in the Hush Security onboarding flow. | `string` | n/a | yes |
 | codeartifact_readonly | Enable CodeArtifact read-only access. | `bool` | `true` | no |
 | ecr_readonly | Enable ECR read-only access. | `bool` | `true` | no |
 | secrets_manager_readonly | Enable Secrets Manager read-only access. | `bool` | `true` | no |
