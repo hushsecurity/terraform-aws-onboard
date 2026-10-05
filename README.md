@@ -7,7 +7,7 @@ Terraform module to integrate your AWS account(s) with Hush Security.
 | Name | Version |
 |------|---------|
 | terraform | >= 1.3.0 |
-| aws | >= 4.0, < 6.0 |
+| aws | >= 6.0, < 7.0 |
 
 ## Deployment Modes
 
@@ -22,7 +22,8 @@ This module supports two deployment modes:
 
 ```hcl
 module "hush_security" {
-  source = "hushsecurity/onboard/aws"
+  source  = "hushsecurity/onboard/aws"
+  version = "~> 2.0"
 
   hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
 }
@@ -32,7 +33,8 @@ module "hush_security" {
 
 ```hcl
 module "hush_security" {
-  source = "hushsecurity/onboard/aws"
+  source  = "hushsecurity/onboard/aws"
+  version = "~> 2.0"
 
   hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
 
@@ -65,7 +67,8 @@ For organizations with multiple AWS accounts, use StackSet mode to deploy across
 **Deploy to OUs:**
 ```hcl
 module "hush_security" {
-  source = "hushsecurity/onboard/aws"
+  source  = "hushsecurity/onboard/aws"
+  version = "~> 2.0"
 
   type        = "stackset"
   hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
@@ -77,7 +80,8 @@ module "hush_security" {
 **Deploy to specific accounts:**
 ```hcl
 module "hush_security" {
-  source = "hushsecurity/onboard/aws"
+  source  = "hushsecurity/onboard/aws"
+  version = "~> 2.0"
 
   type        = "stackset"
   hush_org_id = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
