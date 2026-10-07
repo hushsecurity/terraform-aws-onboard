@@ -46,6 +46,7 @@ data "aws_iam_policy_document" "this" {
     actions = [
       "iam:GetRole",
       "iam:GetRolePolicy",
+      "iam:ListRolePolicies",
       "iam:ListAttachedRolePolicies",
       "iam:PassRole"
     ]
