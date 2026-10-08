@@ -1,21 +1,26 @@
 locals {
-  version = "2.0"
+  version = "2.1"
 
   # The current name wins when it was supplied; a superseded one fills in for
   # a consumer who has not moved yet, so their setting - an opt-out especially
   # - survives the rename. All default null so "not supplied" is tellable from
   # "supplied as false", which is the whole point: coalescing the superseded
   # name first would override an explicit new-name false with a stale true.
+  # The final fallback is the value a consumer who supplies none of them gets,
+  # so it has to be the CloudFormation template's own default - true. It read
+  # false, which made the module pass AgentDiscoveryReadonly="false" and
+  # override that default, leaving discovery off for every consumer on
+  # defaults.
   agent_discovery = coalesce(
     var.agent_discovery_readonly,
     var.bedrock_agents_readonly,
     var.bedrock_agentcore_agents_readonly,
-    false,
+    true,
   )
   mcp_discovery = coalesce(
     var.mcp_discovery_readonly,
     var.bedrock_agentcore_readonly,
-    false,
+    true,
   )
 
   hush_account_arn = "arn:aws:iam::${var.hush_account_id}:root"
