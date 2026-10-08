@@ -133,7 +133,7 @@ variable "mcp_discovery_readonly" {
 variable "agent_activity_readonly" {
   description = "Enable agent-activity read-only access for the activity feed. Grants scoped CloudWatch Logs reads on the AgentCore span and gateway log groups, which carry agent prompts, tool arguments and tool results. Agent invocations themselves are read from CloudTrail through the SecurityAudit policy, so keep security_audit enabled."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "allowed_regions" {
