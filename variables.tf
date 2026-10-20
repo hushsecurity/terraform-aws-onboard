@@ -60,6 +60,12 @@ variable "kms_readonly" {
   default     = true
 }
 
+variable "kms_decrypt" {
+  description = "Allow kms:Decrypt on the account's keys, to read Secrets Manager and SSM values under customer-managed keys."
+  type        = bool
+  default     = true
+}
+
 variable "s3_tf_state_readonly" {
   description = "Enable S3 read-only access for Terraform state file scanning."
   type        = bool

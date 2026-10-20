@@ -62,15 +62,18 @@ data "aws_iam_policy_document" "this" {
     resources = ["*"]
   }
 
-  statement {
-    sid    = "KmsDecrypt"
-    effect = "Allow"
-    actions = [
-      "kms:Decrypt"
-    ]
-    resources = [
-      "arn:aws:kms:*:${data.aws_caller_identity.current.account_id}:key/*"
-    ]
+  dynamic "statement" {
+    for_each = var.kms_decrypt ? [1] : []
+    content {
+      sid    = "KmsDecrypt"
+      effect = "Allow"
+      actions = [
+        "kms:Decrypt"
+      ]
+      resources = [
+        "arn:aws:kms:*:${data.aws_caller_identity.current.account_id}:key/*"
+      ]
+    }
   }
 
   dynamic "statement" {

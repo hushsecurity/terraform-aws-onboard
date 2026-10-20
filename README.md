@@ -105,6 +105,7 @@ module "hush_security" {
 | secrets_manager_readonly | Enable Secrets Manager read-only access. | `bool` | `true` | no |
 | ssm_parameter_store_readonly | Enable SSM Parameter Store read-only access. | `bool` | `true` | no |
 | kms_readonly | Enable KMS read-only access. | `bool` | `true` | no |
+| kms_decrypt | Allow `kms:Decrypt` on the account's keys, for secrets under customer-managed keys. | `bool` | `true` | no |
 | s3_tf_state_readonly | Enable S3 read-only access for Terraform state files. | `bool` | `true` | no |
 | s3_tf_state_bucket_arns | S3 bucket ARNs for Terraform state. | `list(string)` | `null` | no |
 | s3_tf_state_bucket_tags | S3 bucket tags for Terraform state. <br>Requires [Bucket ABAC](https://docs.aws.amazon.com/AmazonS3/latest/userguide/security_iam_service-with-iam.html#security_iam_service-with-iam-tags) to be enabled. | `map(string)` | `{}` | no |

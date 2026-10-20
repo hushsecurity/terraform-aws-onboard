@@ -22,6 +22,7 @@ resource "aws_cloudformation_stack_set" "this" {
     SecretsManagerReadonly    = var.secrets_manager_readonly ? "true" : "false"
     SSMParameterStoreReadonly = var.ssm_parameter_store_readonly ? "true" : "false"
     KMSReadonly               = var.kms_readonly ? "true" : "false"
+    KMSDecrypt                = var.kms_decrypt ? "true" : "false"
     S3TFStateReadOnly         = var.s3_tf_state_readonly ? "true" : "false"
     S3TFStateBucketARNs       = join(",", coalesce(var.s3_tf_state_bucket_arns, ["*"]))
     S3TFStateBucketTags       = length(var.s3_tf_state_bucket_tags) > 0 ? jsonencode(var.s3_tf_state_bucket_tags) : ""
