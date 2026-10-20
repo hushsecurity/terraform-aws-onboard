@@ -121,6 +121,7 @@ module "hush_security" {
 | organizational_unit_ids | AWS Organizations OU IDs to deploy to. | `list(string)` | `[]` | * |
 | account_ids | AWS account IDs to deploy to. | `list(string)` | `[]` | * |
 | stackset_template_url | S3 URL of the CloudFormation template. | `string` | (hosted URL) | no |
+| stackset_region | Region to deploy the StackSet instances to. | `string` | `"us-east-1"` | no |
 | auto_deployment | Auto-deploy to new accounts added to target OUs. | `bool` | `true` | no |
 
 \* At least one of `organizational_unit_ids` or `account_ids` must be provided for stackset mode.

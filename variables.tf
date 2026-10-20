@@ -156,6 +156,12 @@ variable "stackset_template_url" {
   default     = "https://hush-security-public.s3.eu-west-1.amazonaws.com/cf_templates/aws_onboarding.yaml"
 }
 
+variable "stackset_region" {
+  description = "Region to deploy the StackSet instances to. The stack holds only a global IAM role."
+  type        = string
+  default     = "us-east-1"
+}
+
 variable "organizational_unit_ids" {
   description = "List of AWS Organizations OU IDs to deploy the StackSet to."
   type        = list(string)

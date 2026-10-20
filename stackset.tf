@@ -45,7 +45,7 @@ resource "aws_cloudformation_stack_set_instance" "this" {
   count = var.type == "stackset" ? 1 : 0
 
   stack_set_name            = aws_cloudformation_stack_set.this[0].name
-  stack_set_instance_region = "us-east-1"
+  stack_set_instance_region = var.stackset_region
 
   deployment_targets {
     organizational_unit_ids = length(var.organizational_unit_ids) > 0 ? var.organizational_unit_ids : null
