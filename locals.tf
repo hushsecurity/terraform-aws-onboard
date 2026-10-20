@@ -1,5 +1,5 @@
 locals {
-  version = "2.0"
+  version = "2.1"
 
   # The current name wins when it was supplied; a superseded one fills in for
   # a consumer who has not moved yet, so their setting - an opt-out especially
