@@ -112,7 +112,10 @@ module "hush_security" {
 | s3_tf_state_object_arns | Specific S3 object ARNs for Terraform state files. | `list(string)` | `null` | no |
 | security_audit | Attach AWS SecurityAudit managed policy. | `bool` | `true` | no |
 | send_events | Whether to send AWS resource change events via EventBridge. | `bool` | `true` | no |
-| allowed_regions | Restrict access to specific AWS regions. Null allows all. | `list(string)` | `null` | no |
+| agent_discovery_readonly | Enable agent discovery read-only access, covering both classic Bedrock Agents and AgentCore harnesses and runtimes. Relies on `security_audit` for the CloudTrail and IAM reads behind full agent metadata. | `bool` | `true` | no |
+| mcp_discovery_readonly | Enable MCP server discovery read-only access, covering the AgentCore gateways an account exposes as MCP servers. | `bool` | `true` | no |
+| agent_activity_readonly | Enable agent-activity read-only access. Grants scoped CloudWatch Logs reads on the AgentCore span and gateway log groups, **which carry agent prompts, tool arguments and tool results**. Relies on `security_audit` for the CloudTrail reads behind agent invocations. | `bool` | `true` | no |
+| allowed_regions | Restrict access to specific AWS regions. Null allows all. <br>Each entry duplicates the `aws:RequestedRegion` condition into every scoped statement (~342 characters), against the 10,240-character inline policy limit; with all toggles enabled, roughly 21 regions fit. | `list(string)` | `null` | no |
 | tags | Additional tags. | `map(string)` | `{}` | no |
 
 ### StackSet Mode Variables
