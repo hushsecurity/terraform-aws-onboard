@@ -19,7 +19,7 @@ locals {
   )
 
   hush_account_arn = "arn:aws:iam::${var.hush_account_id}:root"
-  role_name        = "hush-security-${random_id.suffix.hex}"
+  role_name        = coalesce(var.role_name, "hush-security-${random_id.suffix.hex}")
 
   common_tags = merge(
     {

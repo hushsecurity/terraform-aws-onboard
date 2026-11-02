@@ -154,7 +154,24 @@ variable "tags" {
   default     = {}
 }
 
+variable "role_name" {
+  description = "Name of the IAM role and its inline policy. Null uses hush-security-<random suffix>."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.role_name == null || can(regex("^[\\w+=,.@-]{1,64}$", var.role_name))
+    error_message = "role_name must be a valid IAM role name of up to 64 characters."
+  }
+}
+
 # StackSet mode variables
+
+variable "stackset_name" {
+  description = "Name of the CloudFormation StackSet. Null uses hush-security-<random suffix>."
+  type        = string
+  default     = null
+}
 
 variable "stackset_template_url" {
   description = "S3 URL of the CloudFormation template for StackSet deployment."

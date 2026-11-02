@@ -114,6 +114,7 @@ module "hush_security" {
 | send_events | Whether to send AWS resource change events via EventBridge. | `bool` | `true` | no |
 | allowed_regions | Restrict access to specific AWS regions. Null allows all. | `list(string)` | `null` | no |
 | tags | Additional tags. | `map(string)` | `{}` | no |
+| role_name | Name of the IAM role and its inline policy. Null uses `hush-security-<random suffix>`. | `string` | `null` | no |
 
 ### StackSet Mode Variables
 
@@ -121,6 +122,7 @@ module "hush_security" {
 |------|-------------|------|---------|:--------:|
 | organizational_unit_ids | AWS Organizations OU IDs to deploy to. | `list(string)` | `[]` | * |
 | account_ids | AWS account IDs to deploy to. | `list(string)` | `[]` | * |
+| stackset_name | Name of the CloudFormation StackSet. Null uses `hush-security-<random suffix>`. | `string` | `null` | no |
 | stackset_template_url | S3 URL of the CloudFormation template. | `string` | (hosted URL) | no |
 | stackset_region | Region to deploy the StackSet instances to. | `string` | `"us-east-1"` | no |
 | auto_deployment | Auto-deploy to new accounts added to target OUs. | `bool` | `true` | no |
@@ -143,7 +145,8 @@ module "hush_security" {
 |------|-------------|
 | stackset_arn | ARN of the CloudFormation StackSet |
 | stackset_name | Name of the CloudFormation StackSet |
-| unique_suffix | Unique suffix for role naming (needed for registration) |
+| role_name | Name of the IAM role in every account (needed for registration) |
+| unique_suffix | Unique suffix for role naming |
 
 ## Integration
 
@@ -159,9 +162,9 @@ After deploying:
 
 After deploying:
 
-1. Copy the `stackset_arn` and `unique_suffix` outputs
+1. Copy the `stackset_arn` and `role_name` outputs
 2. In the Hush Security dashboard, go to Integrations > AWS
-3. Create a new integration using the StackSet ARN and unique suffix
+3. Create a new integration using the StackSet ARN and role name
 
 Hush Security will automatically discover all accounts where the StackSet has deployed roles.
 
