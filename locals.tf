@@ -19,7 +19,9 @@ locals {
   )
 
   hush_account_arn = "arn:aws:iam::${var.hush_account_id}:root"
-  role_name        = "hush-security-${random_id.suffix.hex}"
+  role_name        = "${var.role_prefix}${random_id.suffix.hex}"
+  # a StackSet name allows only letters, digits and hyphens
+  stackset_name = "${replace(var.role_prefix, "/[^-a-zA-Z0-9]/", "-")}${random_id.suffix.hex}"
 
   common_tags = merge(
     {

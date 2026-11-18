@@ -30,6 +30,17 @@ variable "hush_account_id" {
   }
 }
 
+variable "role_prefix" {
+  description = "Prefix of the IAM role's and StackSet's names, each followed by a random 16-character suffix."
+  type        = string
+  default     = "hush-security-"
+
+  validation {
+    condition     = can(regex("^[a-zA-Z][\\w+=,.@-]{0,47}$", var.role_prefix))
+    error_message = "role_prefix must start with a letter, as a StackSet name does, and be up to 48 of the characters IAM allows in a role name: alphanumerics and +=,.@_-"
+  }
+}
+
 variable "codeartifact_readonly" {
   description = "Enable CodeArtifact read-only access."
   type        = bool

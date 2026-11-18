@@ -1,7 +1,7 @@
 resource "aws_cloudformation_stack_set" "this" {
   count = var.type == "stackset" ? 1 : 0
 
-  name             = "hush-security-${random_id.suffix.hex}"
+  name             = local.stackset_name
   permission_model = "SERVICE_MANAGED"
   template_url     = var.stackset_template_url
   call_as          = var.call_as
@@ -14,7 +14,9 @@ resource "aws_cloudformation_stack_set" "this" {
     }
   }
 
-  parameters = {
+  # RolePrefix only when chosen: a template_url pinned to a template that
+  # predates the parameter rejects it
+  parameters = merge(var.role_prefix == "hush-security-" ? {} : { RolePrefix = var.role_prefix }, {
     UniqueSuffix              = random_id.suffix.hex
     ExternalId                = var.hush_org_id
     CodeArtifactReadonly      = var.codeartifact_readonly ? "true" : "false"
@@ -33,7 +35,7 @@ resource "aws_cloudformation_stack_set" "this" {
     McpDiscoveryReadonly      = local.mcp_discovery ? "true" : "false"
     AgentActivityReadonly     = var.agent_activity_readonly ? "true" : "false"
     AllowedRegions            = join(",", coalesce(var.allowed_regions, []))
-  }
+  })
 
   capabilities = ["CAPABILITY_NAMED_IAM"]
 

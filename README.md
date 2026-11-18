@@ -100,6 +100,7 @@ module "hush_security" {
 |------|-------------|------|---------|:--------:|
 | type | Deployment type: `single` or `stackset`. | `string` | `"single"` | no |
 | hush_org_id | Unique identifier for your organization, shown as the External ID in the Hush Security onboarding flow. | `string` | n/a | yes |
+| role_prefix | Prefix of the IAM role's and StackSet's names. See [Role naming](#role-naming). | `string` | `"hush-security-"` | no |
 | codeartifact_readonly | Enable CodeArtifact read-only access. | `bool` | `true` | no |
 | ecr_readonly | Enable ECR read-only access. | `bool` | `true` | no |
 | secrets_manager_readonly | Enable Secrets Manager read-only access. | `bool` | `true` | no |
@@ -135,6 +136,7 @@ module "hush_security" {
 |------|-------------|
 | role_arn | ARN of the IAM role created for Hush Security |
 | role_name | Name of the IAM role |
+| role_prefix | Prefix of the IAM role's name |
 | unique_suffix | Unique suffix used for role naming |
 
 ### StackSet Mode
@@ -143,6 +145,7 @@ module "hush_security" {
 |------|-------------|
 | stackset_arn | ARN of the CloudFormation StackSet |
 | stackset_name | Name of the CloudFormation StackSet |
+| role_prefix | Prefix of the IAM role's name (needed for registration) |
 | unique_suffix | Unique suffix for role naming (needed for registration) |
 
 ## Integration
@@ -159,11 +162,35 @@ After deploying:
 
 After deploying:
 
-1. Copy the `stackset_arn` and `unique_suffix` outputs
+1. Copy the `stackset_arn`, `role_prefix` and `unique_suffix` outputs
 2. In the Hush Security dashboard, go to Integrations > AWS
-3. Create a new integration using the StackSet ARN and unique suffix
+3. Create a new integration using the StackSet ARN, role prefix and unique suffix
 
 Hush Security will automatically discover all accounts where the StackSet has deployed roles.
+
+## Role naming
+
+The role in every account is named `<role_prefix><unique_suffix>`, e.g.
+`hush-security-0123456789abcdef` by default, or `acme-hush-0123456789abcdef`
+with `role_prefix = "acme-hush-"`. The random suffix keeps several onboardings
+in one account apart. In stackset mode the StackSet is named the same way, with
+any character other than a letter, digit or hyphen in the prefix replaced by a
+hyphen, and Hush Security finds each account's role by its name. The prefix is
+therefore fixed once the integration is created: changing it creates new roles,
+and the integration has to be created again with the new prefix.
+
+Beyond its name, Hush Security relies on the role as the module creates it:
+
+- the trust policy, which lets Hush Security's account assume the role with
+  your `hush_org_id` as the External ID, and lets EventBridge assume it to send
+  events
+- the inline policy's statement `Sid`s, which tell Hush Security which features
+  the role grants
+- the SecurityAudit managed policy, which also lets Hush Security read the
+  inline policy
+- the `Version` and `CreatedBy` tags
+
+Changing any of these can turn features off or put the integration in error.
 
 ## License
 
