@@ -10,13 +10,17 @@ locals {
     var.agent_discovery_readonly,
     var.bedrock_agents_readonly,
     var.bedrock_agentcore_agents_readonly,
-    false,
+    true,
   )
   mcp_discovery = coalesce(
     var.mcp_discovery_readonly,
     var.bedrock_agentcore_readonly,
-    false,
+    true,
   )
+  # Activity is joined to the agents discovery finds, so alone it is a
+  # warning in Hush and log reads nobody asked for; it follows discovery
+  # unless set
+  agent_activity = coalesce(var.agent_activity_readonly, local.agent_discovery)
 
   hush_account_arn = "arn:aws:iam::${var.hush_account_id}:root"
   role_name        = "${var.role_prefix}${random_id.suffix.hex}"

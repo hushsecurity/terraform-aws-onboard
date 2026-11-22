@@ -113,6 +113,9 @@ module "hush_security" {
 | s3_tf_state_object_arns | Specific S3 object ARNs for Terraform state files. | `list(string)` | `null` | no |
 | security_audit | Attach AWS SecurityAudit managed policy. | `bool` | `true` | no |
 | send_events | Whether to send AWS resource change events via EventBridge. | `bool` | `true` | no |
+| agent_discovery_readonly | Enable Bedrock Agents and AgentCore agent discovery. | `bool` | `true` | no |
+| mcp_discovery_readonly | Enable discovery of the AgentCore gateways exposed as MCP servers. | `bool` | `true` | no |
+| agent_activity_readonly | Enable the agent activity feed (CloudWatch Logs reads on the AgentCore span and gateway log groups). Null follows `agent_discovery_readonly`. | `bool` | `null` | no |
 | allowed_regions | Restrict access to specific AWS regions. Null allows all. | `list(string)` | `null` | no |
 | tags | Additional tags. | `map(string)` | `{}` | no |
 
@@ -167,6 +170,16 @@ After deploying:
 3. Create a new integration using the StackSet ARN, role prefix and unique suffix
 
 Hush Security will automatically discover all accounts where the StackSet has deployed roles.
+
+## Upgrading
+
+From 2.3.0, agent discovery, MCP discovery and agent activity default to on,
+as they do in the CloudFormation template. If you never set these toggles,
+your next apply adds their read-only statements to the role (in place, and in
+stackset mode as a StackSet update to every account). Agent activity reads the
+AgentCore span and gateway log groups, which hold agent prompts, tool
+arguments and tool results. To keep any of them off, set it to `false`; with
+agent discovery off, agent activity stays off unless you set it.
 
 ## Role naming
 

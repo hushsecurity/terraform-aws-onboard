@@ -298,7 +298,7 @@ data "aws_iam_policy_document" "this" {
   }
 
   dynamic "statement" {
-    for_each = var.agent_activity_readonly ? [1] : []
+    for_each = local.agent_activity ? [1] : []
     content {
       sid    = "AgentActivity"
       effect = "Allow"

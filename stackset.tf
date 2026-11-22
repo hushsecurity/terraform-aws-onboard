@@ -34,7 +34,7 @@ resource "aws_cloudformation_stack_set" "this" {
     SendEvents                = var.send_events ? "true" : "false"
     AgentDiscoveryReadonly    = local.agent_discovery ? "true" : "false"
     McpDiscoveryReadonly      = local.mcp_discovery ? "true" : "false"
-    AgentActivityReadonly     = var.agent_activity_readonly ? "true" : "false"
+    AgentActivityReadonly     = local.agent_activity ? "true" : "false"
     AllowedRegions            = join(",", coalesce(var.allowed_regions, []))
     # deprecated in the template; the toggles above already fold them in
     BedrockAgentsReadonly          = ""
