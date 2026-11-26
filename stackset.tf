@@ -14,9 +14,10 @@ resource "aws_cloudformation_stack_set" "this" {
     }
   }
 
-  # RolePrefix only when chosen: a template_url pinned to a template that
-  # predates the parameter rejects it
-  parameters = merge(var.role_prefix == "hush-security-" ? {} : { RolePrefix = var.role_prefix }, {
+  # Every template parameter is sent, defaults included: AWS stores a default
+  # for any parameter left out, and the next plan would show it as a change
+  parameters = {
+    RolePrefix                = var.role_prefix
     UniqueSuffix              = random_id.suffix.hex
     ExternalId                = var.hush_org_id
     CodeArtifactReadonly      = var.codeartifact_readonly ? "true" : "false"
@@ -35,7 +36,11 @@ resource "aws_cloudformation_stack_set" "this" {
     McpDiscoveryReadonly      = local.mcp_discovery ? "true" : "false"
     AgentActivityReadonly     = var.agent_activity_readonly ? "true" : "false"
     AllowedRegions            = join(",", coalesce(var.allowed_regions, []))
-  })
+    # deprecated in the template; the toggles above already fold them in
+    BedrockAgentsReadonly          = ""
+    BedrockAgentCoreAgentsReadonly = ""
+    BedrockAgentCoreReadonly       = ""
+  }
 
   capabilities = ["CAPABILITY_NAMED_IAM"]
 
