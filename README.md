@@ -196,7 +196,7 @@ Hush Security will automatically discover all accounts where the StackSet has de
 
 ## Upgrading
 
-From 2.3.0, agent discovery, MCP discovery and agent activity default to on,
+From 2.2.2, agent discovery, MCP discovery and agent activity default to on,
 as they do in the CloudFormation template. If you never set these toggles,
 your next apply adds their read-only statements to the role (in place, and in
 stackset mode as a StackSet update to every account). Agent activity reads the
