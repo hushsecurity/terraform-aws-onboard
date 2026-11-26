@@ -251,9 +251,17 @@ data "aws_iam_policy_document" "this" {
         "bedrock-agentcore:ListHarnesses",
         "bedrock-agentcore:GetHarness",
         "bedrock-agentcore:GetGateway",
+        "bedrock-agentcore:ListOauth2CredentialProviders",
+        "bedrock-agentcore:GetOauth2CredentialProvider",
+        "bedrock-agentcore:ListGatewayTargets",
+        "bedrock-agentcore:GetGatewayTarget",
         "cloudtrail:LookupEvents",
         "iam:GetRole",
-        "iam:ListAttachedRolePolicies"
+        "iam:ListAttachedRolePolicies",
+        "iam:ListRolePolicies",
+        "iam:GetRolePolicy",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion"
       ]
       resources = ["*"]
       dynamic "condition" {
