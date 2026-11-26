@@ -202,3 +202,26 @@ variable "call_as" {
   type        = string
   default     = "DELEGATED_ADMIN"
 }
+
+variable "permission_model" {
+  description = "StackSet permission model: SERVICE_MANAGED deploys through AWS Organizations, SELF_MANAGED through administration and execution roles you created, for accounts outside an organization or without delegated StackSets admin."
+  type        = string
+  default     = "SERVICE_MANAGED"
+
+  validation {
+    condition     = contains(["SERVICE_MANAGED", "SELF_MANAGED"], var.permission_model)
+    error_message = "permission_model must be 'SERVICE_MANAGED' or 'SELF_MANAGED'."
+  }
+}
+
+variable "administration_role_arn" {
+  description = "SELF_MANAGED only: ARN of the StackSet administration role. Null uses AWSCloudFormationStackSetAdministrationRole in the calling account."
+  type        = string
+  default     = null
+}
+
+variable "execution_role_name" {
+  description = "SELF_MANAGED only: name of the StackSet execution role in each target account. Null uses AWSCloudFormationStackSetExecutionRole."
+  type        = string
+  default     = null
+}

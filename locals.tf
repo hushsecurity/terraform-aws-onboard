@@ -22,6 +22,8 @@ locals {
   # unless set
   agent_activity = coalesce(var.agent_activity_readonly, local.agent_discovery)
 
+  self_managed = var.permission_model == "SELF_MANAGED"
+
   hush_account_arn = "arn:aws:iam::${var.hush_account_id}:root"
   role_name        = "${var.role_prefix}${random_id.suffix.hex}"
   # a StackSet name allows only letters, digits and hyphens

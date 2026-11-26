@@ -92,6 +92,25 @@ module "hush_security" {
 
 **Note:** StackSet mode requires delegated administrator access for CloudFormation StackSets, or management account access.
 
+**Deploy without AWS Organizations (self-managed):**
+```hcl
+module "hush_security" {
+  source  = "hushsecurity/onboard/aws"
+  version = "~> 2.0"
+
+  type             = "stackset"
+  permission_model = "SELF_MANAGED"
+  hush_org_id      = "org-us1234567890abc"  # Your organization's unique ID, shown as the External ID in the Hush onboarding flow
+
+  account_ids = ["222222222222", "333333333333"]
+}
+```
+
+A self-managed StackSet needs the
+[StackSet administration and execution roles](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html)
+and deploys to `account_ids` only. The account you run it from gets its role
+from the module directly, so leave it out of `account_ids`.
+
 ## Inputs
 
 ### Common Variables
@@ -128,6 +147,10 @@ module "hush_security" {
 | stackset_template_url | S3 URL of the CloudFormation template. | `string` | (hosted URL) | no |
 | stackset_region | Region to deploy the StackSet instances to. | `string` | `"us-east-1"` | no |
 | auto_deployment | Auto-deploy to new accounts added to target OUs. | `bool` | `true` | no |
+| call_as | Run as the management account (`SELF`) or a delegated administrator (`DELEGATED_ADMIN`). `SERVICE_MANAGED` only. | `string` | `"DELEGATED_ADMIN"` | no |
+| permission_model | `SERVICE_MANAGED` (through AWS Organizations) or `SELF_MANAGED` (through your own StackSet roles). | `string` | `"SERVICE_MANAGED"` | no |
+| administration_role_arn | `SELF_MANAGED` only: the StackSet administration role. Null uses `AWSCloudFormationStackSetAdministrationRole`. | `string` | `null` | no |
+| execution_role_name | `SELF_MANAGED` only: the StackSet execution role in each target account. Null uses `AWSCloudFormationStackSetExecutionRole`. | `string` | `null` | no |
 
 \* At least one of `organizational_unit_ids` or `account_ids` must be provided for stackset mode.
 
